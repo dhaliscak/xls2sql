@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "HRS3zIwdbqQhgwYtrb3747VRzJk8BzYhpm9mofPKzU4bh/ziYcIqLHz4KORo7LdOGYXgnDNox8k5YM4rFNuo7w==",
+  "success": true,
+  "projectFilePath": "C:\\Source\\dhaliscak\\xls2sql\\xls2sql\\xls2sql.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\exceldatareader\\3.6.0\\exceldatareader.3.6.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\exceldatareader.dataset\\3.6.0\\exceldatareader.dataset.3.6.0.nupkg.sha512"
+  ],
+  "logs": []
+}
