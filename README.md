@@ -12,7 +12,7 @@ Download content of following folder https://github.com/dhaliscak/xls2sql/tree/m
 # Changelog
 
 ## v1.1
-- new feature: app.config with ability to change batch size (default 1000), prefer nulls (default true), trim whitespaces (default true)
+- new feature: added configfile with ability to change batch size (default 1000), prefer nulls (default true), trim whitespaces (default true)
 - fixed: replacing "new line" character in name of columns
 
 ## v1.0
