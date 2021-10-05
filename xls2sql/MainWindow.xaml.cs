@@ -85,9 +85,11 @@ namespace xls2sql
                 using (IExcelDataReader excelReader = ExcelReaderFactory.CreateReader(new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
                 {
                     var dataSet = excelReader.AsDataSet();
-                    var separator = int.Parse(ConfigurationManager.AppSettings.Get("Separator"));
                     var totalColumns = dataSet.Tables[workbook].Columns.Count;
                     var totalRows = dataSet.Tables[workbook].Rows.Count;
+                    var separator = int.Parse(ConfigurationManager.AppSettings.Get("Separator"));
+                    var preferNulls = bool.Parse(ConfigurationManager.AppSettings.Get("PreferNulls"));
+                    var trimWhiteSpaces = bool.Parse(ConfigurationManager.AppSettings.Get("TrimWhiteSpaces"));
 
                     for (var i = 0; i < totalRows; i++)
                     {
@@ -110,7 +112,9 @@ namespace xls2sql
                             values += "(";
                         for (var j = 0; j < totalColumns; j++)
                         {
-                            var value = dataSet.Tables[workbook].Rows[i][j].ToString().Replace("'", "''").Trim();
+                            var value = dataSet.Tables[workbook].Rows[i][j].ToString().Replace("'", "''");
+                            if (trimWhiteSpaces)
+                                value = value.Trim();
 
                             //1st row contains column names so let's store it separatelly
                             //else generate data
@@ -135,11 +139,17 @@ namespace xls2sql
                                 //else dont put , at the end
                                 if (j != totalColumns - 1)
                                 {
-                                    values += (value == "") ? "null, " : "N'" + value + "', ";
+                                    if (preferNulls)
+                                        values += (value == "") ? "null, " : "N'" + value + "', ";
+                                    else
+                                        values += "N'" + value + "', ";
                                 }
                                 else
                                 {
-                                    values += (value == "") ? "null" : "N'" + value + "'";
+                                    if (preferNulls)
+                                        values += (value == "") ? "null" : "N'" + value + "'";
+                                    else
+                                        values += "N'" + value + "'";
                                 }
                             }
                         }
