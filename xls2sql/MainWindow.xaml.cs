@@ -1,11 +1,9 @@
 ﻿using Microsoft.Win32;
-<<<<<<< HEAD
 using System;
-=======
->>>>>>> b50927ba774ad5583922c9eb29cf1acbe0c8744a
 using System.IO;
 using System.Windows;
 using ExcelDataReader;
+using System.Configuration;
 
 namespace xls2sql
 {

@@ -6,8 +6,6 @@ C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\xls2sql.runtimeco
 C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\xls2sql.dll
 C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\ref\xls2sql.dll
 C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\xls2sql.pdb
-C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\ExcelDataReader.dll
-C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\ExcelDataReader.DataSet.dll
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.csproj.AssemblyReference.cache
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\MainWindow.g.cs
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\App.g.cs
@@ -19,8 +17,8 @@ C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.Generated
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.AssemblyInfoInputs.cache
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.AssemblyInfo.cs
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.csproj.CoreCompileInputs.cache
-C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.csproj.CopyComplete
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.dll
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\ref\xls2sql.dll
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.pdb
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.genruntimeconfig.cache
+C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.csproj.Fody.CopyLocal.cache
