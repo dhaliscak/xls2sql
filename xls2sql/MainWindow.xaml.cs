@@ -1,19 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ExcelDataReader;
 using System.Configuration;
 
@@ -97,12 +85,27 @@ namespace xls2sql
                 using (IExcelDataReader excelReader = ExcelReaderFactory.CreateReader(new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
                 {
                     var dataSet = excelReader.AsDataSet();
-
+                    var separator = int.Parse(ConfigurationManager.AppSettings.Get("Separator"));
                     var totalColumns = dataSet.Tables[workbook].Columns.Count;
                     var totalRows = dataSet.Tables[workbook].Rows.Count;
 
                     for (var i = 0; i < totalRows; i++)
                     {
+                        //after first run, we know what are the clumns names
+                        if (i == 1)
+                        {
+                            query += $"USE {databaseName};\nSET ANSI_NULLS ON;\nSET QUOTED_IDENTIFIER ON;\n\n";
+                            if ((bool)isCreateTable)
+                            {
+                                query += $"CREATE TABLE {tableName} ({columnNamesCreateTable});\n\n";
+                            }
+                        }
+                        //we can look to separator only after first run
+                        if (i % separator == 0 && i > 0)
+                        {
+                            query += $"INSERT INTO {tableName} ({columnNames})\nVALUES {values};\n\n";
+                            values = string.Empty;
+                        }
                         if (i != 0)
                             values += "(";
                         for (var j = 0; j < totalColumns; j++)
@@ -126,30 +129,31 @@ namespace xls2sql
                                     columnNamesCreateTable += "[" + value + "] varchar(max) NULL";
                                 }
                             }
-                            else
+                            if (i > 0)
                             {
                                 //if we are not on last column, use separator
                                 //else dont put , at the end
                                 if (j != totalColumns - 1)
                                     values += "N'" + value + "', ";
-                                else
+                                else 
                                     values += "N'" + value + "'";
                             }
                         }
                         //if we are not on last column, use separator
                         //else dont put , at the end
-                        if (i != totalRows - 1 && i != 0)
+                        if (i != totalRows - 1 && i != 0 && ((i+1) % separator != 0))
                             values += "), ";
-                        else if (i == totalRows - 1 && i != 0)
+                        else if ((i == totalRows - 1 && i != 0) || ((i+1) % separator == 0))
+                        {
                             values += ")";
+                        }
+                        //at very end print last VALUES
+                        if (i == (totalRows - 1))
+                        {
+                            query += $"INSERT INTO {tableName} ({columnNames})\nVALUES {values};\n\n";
+                        }
                     }
                 }
-                query += $"USE {databaseName};\nSET ANSI_NULLS ON;\nSET QUOTED_IDENTIFIER ON;\n\n";
-                if ((bool)isCreateTable)
-                {
-                    query += $"CREATE TABLE {tableName} ({columnNamesCreateTable});\n\n";
-                }
-                query += $"INSERT INTO {tableName} ({columnNames})\nVALUES {values};";
                 txtEditor.Text = query;
             }
             else

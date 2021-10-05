@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:xls2sql"
         mc:Ignorable="d"
-        Title="xls2sql 1.0" Height="450" Width="800">
+        Title="xls2sql 1.1 (by Daniel Haliscak)" Height="450" Width="800">
     <Grid>
         <DockPanel Margin="10">
             <WrapPanel HorizontalAlignment="left" DockPanel.Dock="Top" Margin="0,0,0,10">

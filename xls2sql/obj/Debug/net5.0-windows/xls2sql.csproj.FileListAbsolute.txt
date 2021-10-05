@@ -24,6 +24,7 @@ C:\Source\dhaliscak\xls2sql\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.pdb
 C:\Source\dhaliscak\xls2sql\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.genruntimeconfig.cache
 C:\Source\dhaliscak\xls2sql\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.csproj.AssemblyReference.cache
 C:\Source\dhaliscak\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.exe
+C:\Source\dhaliscak\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.dll.config
 C:\Source\dhaliscak\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.deps.json
 C:\Source\dhaliscak\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.runtimeconfig.json
 C:\Source\dhaliscak\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.runtimeconfig.dev.json

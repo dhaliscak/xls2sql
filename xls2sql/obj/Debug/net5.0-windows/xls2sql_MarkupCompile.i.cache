@@ -1,5 +1,5 @@
 ﻿xls2sql
-1.0.0.0
+1.1.0.0
 
 winexe
 C#
@@ -16,5 +16,5 @@ C:\Source\dhaliscak\xls2sql\xls2sql\App.xaml
 1951439690103
 MainWindow.xaml;
 
-False
+True
 

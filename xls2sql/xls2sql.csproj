@@ -6,6 +6,8 @@
     <UseWPF>true</UseWPF>
     <Authors>Daniel Haliscak</Authors>
     <Copyright>Daniel Haliscak</Copyright>
+    <Version>1.1.0</Version>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
