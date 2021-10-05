@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using ExcelDataReader;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace xls2sql
 {
@@ -110,6 +111,7 @@ namespace xls2sql
                         }
                         if (i != 0)
                             values += "(";
+
                         for (var j = 0; j < totalColumns; j++)
                         {
                             var value = dataSet.Tables[workbook].Rows[i][j].ToString().Replace("'", "''");
@@ -124,8 +126,8 @@ namespace xls2sql
                                 //else dont put , at the end
                                 if (j != totalColumns - 1)
                                 {
-                                    columnNames += "[" + value + "], ";
-                                    columnNamesCreateTable += "[" + value + "] varchar(max) NULL, ";
+                                    columnNames += "[" + Regex.Replace(value, @"\t|\n|\r", "") + "], ";
+                                    columnNamesCreateTable += "[" + Regex.Replace(value, @"\t|\n|\r", "") + "] varchar(max) NULL, ";
                                 }
                                 else
                                 { 
