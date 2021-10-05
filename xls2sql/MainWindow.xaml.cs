@@ -110,7 +110,7 @@ namespace xls2sql
                             values += "(";
                         for (var j = 0; j < totalColumns; j++)
                         {
-                            var value = dataSet.Tables[workbook].Rows[i][j].ToString().Replace("'", "''");
+                            var value = dataSet.Tables[workbook].Rows[i][j].ToString().Replace("'", "''").Trim();
 
                             //1st row contains column names so let's store it separatelly
                             //else generate data
@@ -134,9 +134,13 @@ namespace xls2sql
                                 //if we are not on last column, use separator
                                 //else dont put , at the end
                                 if (j != totalColumns - 1)
-                                    values += "N'" + value + "', ";
-                                else 
-                                    values += "N'" + value + "'";
+                                {
+                                    values += (value == "") ? "null, " : "N'" + value + "', ";
+                                }
+                                else
+                                {
+                                    values += (value == "") ? "null" : "N'" + value + "'";
+                                }
                             }
                         }
                         //if we are not on last column, use separator

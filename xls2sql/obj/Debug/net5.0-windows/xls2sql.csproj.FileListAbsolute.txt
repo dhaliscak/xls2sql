@@ -46,4 +46,3 @@ C:\Source\dhaliscak\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.dll
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Debug\net5.0-windows\ref\xls2sql.dll
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.pdb
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.genruntimeconfig.cache
-C:\Source\dhaliscak\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.csproj.AssemblyReference.cache
