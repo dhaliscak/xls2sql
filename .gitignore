@@ -1,1 +1,5 @@
 /xls2sql/bin/Debug
+/xls2sql/bin/Release
+/xls2sql/obj/Debug
+/xls2sql/obj/publish
+/xls2sql/obj/Release
