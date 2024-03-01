@@ -10,6 +10,15 @@ Do you have data in spreadsheet and you need to quickly create INSERT script? Pe
 Download content of following folder https://github.com/dhaliscak/xls2sql/tree/main/download and run .exe file
 
 # Changelog
+## v2.0
+- added .net framework 4.8 project
+
+## v1.2
+- Removed settings from config file and added them on UI
+- Added "First Column" setting
+- Improved performance (read of 100k records from 342sec to 5sec)
+- Added metric stats to status bar
+- Re-sizable window
 
 ## v1.1
 - new feature: added config file with ability to change batch size (default 1000), prefer nulls (default true), trim whitespaces (default true)
