@@ -1,11 +1,11 @@
-﻿<Window x:Class="xls2sql.MainWindow"
+﻿<Window x:Class="xls2sql48.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:xls2sql"
+        xmlns:local="clr-namespace:xls2sql48"
         mc:Ignorable="d"
-        Title="xls2sql 1.2 (by Daniel Haliscak)" 
+        Title="xls2sql 2.0 (by Daniel Haliscak)" 
         Height="450" 
         Width="800"
         ResizeMode="CanResizeWithGrip">
@@ -14,15 +14,15 @@
             <WrapPanel HorizontalAlignment="left" DockPanel.Dock="Top" Margin="0,0,0,10">
                 <Label x:Name="Database" Content="Database" VerticalAlignment="Center" />
                 <TextBox Name="txtDatabaseName" Width="200" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="True" />
-
+                
                 <Label x:Name="Table" Content="Table" VerticalAlignment="Center" />
                 <TextBox Name="txtTableName" Width="200" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="True" />
-
+                
                 <CheckBox FlowDirection="LeftToRight" Name="ckbCreateTable" VerticalAlignment="Center" Margin="10,0,10,0" IsChecked="True">
                     <TextBlock FlowDirection="LeftToRight" Text="Generate CREATE TABLE Script" />
                 </CheckBox>
             </WrapPanel>
-
+            
             <WrapPanel HorizontalAlignment="left" DockPanel.Dock="Top" Margin="0,0,0,10">
                 <Label x:Name="FirstColumn" Content="First Column" VerticalAlignment="Center" />
                 <ComboBox Margin="5" Padding="5" Name="cmbFirstColumn" Width="150" SelectedIndex="0">
@@ -30,19 +30,19 @@
                     <ComboBoxItem Content="Id (int, IDENTITY 1,1)"/>
                     <ComboBoxItem Content="Id (NewSequentialId())"/>
                 </ComboBox>
-
+                
                 <Label x:Name="Separator" Content="Separator" VerticalAlignment="Center" />
-                <TextBox Name="txtSeparator" Width="100" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="True" Text="1000" UndoLimit="102" RenderTransformOrigin="0,0" PreviewTextInput="NumberValidationTextBox" />
-
+                <TextBox Name="txtSeparator" Width="72" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="True" Text="1000" UndoLimit="102" RenderTransformOrigin="0,0" PreviewTextInput="NumberValidationTextBox" />
+                
                 <CheckBox FlowDirection="LeftToRight" Name="ckbTrimWhiteSpaces" VerticalAlignment="Center" Margin="10,0,10,0" IsChecked="True">
                     <TextBlock FlowDirection="LeftToRight" Text="Trim White Spaces" />
                 </CheckBox>
-
+                
                 <CheckBox FlowDirection="LeftToRight" Name="ckbPrefferNulls" VerticalAlignment="Center" Margin="10,0,10,0" IsChecked="True">
                     <TextBlock FlowDirection="LeftToRight" Text="Preffer Nulls" />
                 </CheckBox>
             </WrapPanel>
-
+            
             <WrapPanel HorizontalAlignment="left" DockPanel.Dock="Top">
                 <Label x:Name="Path" Content="Path" VerticalAlignment="Center" />
                 <TextBox Name="txtFilepath" Width="250" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="False" >
@@ -54,10 +54,10 @@
 
                 <ComboBox Margin="5" Padding="5" Name="cmbWorkbook" Width="100" Visibility="Collapsed">
                 </ComboBox>
-
+                
                 <Button Margin="5" Padding="5" Name="btnExecute" Click="BtnExecute_Click">Generate</Button>
             </WrapPanel>
-
+            
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -69,7 +69,7 @@
                 <TextBox Grid.Row="1" Name="txtEditor" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Margin="0,0,0,0" />
                 <TextBlock Grid.Row="2" Name="txtStatus" Text=""  HorizontalAlignment="Left" />
             </Grid>
-
+            
         </DockPanel>
     </Grid>
 </Window>

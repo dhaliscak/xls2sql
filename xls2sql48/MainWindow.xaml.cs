@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
-namespace xls2sql
+namespace xls2sql48
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -22,6 +22,7 @@ namespace xls2sql
         {
             InitializeComponent();
         }
+
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
@@ -42,8 +43,6 @@ namespace xls2sql
 
                 var filePath = openFileDialog.FileName;
                 txtFilepath.Text = filePath;
-
-                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
                 // Configure the reader to treat the first row as headers
                 var readerConfig = new ExcelReaderConfiguration()
@@ -252,7 +251,7 @@ namespace xls2sql
         {
 
             StringBuilder columnNamesBuilder = new StringBuilder();
-
+            
             foreach (var column in headers)
             {
                 string columnName = trimWhiteSpaces ? column.Trim() : column;

@@ -22,3 +22,28 @@ C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\ref\xls2sql.dll
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.pdb
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.genruntimeconfig.cache
 C:\Source\dhaliscak\xls2sql\xls2sql\obj\Release\net5.0-windows\xls2sql.csproj.Fody.CopyLocal.cache
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\xls2sql.exe
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\xls2sql.deps.json
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\xls2sql.runtimeconfig.json
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\xls2sql.runtimeconfig.dev.json
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\xls2sql.dll
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\ref\xls2sql.dll
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\xls2sql.pdb
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\ExcelDataReader.dll
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\bin\Release\net5.0-windows\ExcelDataReader.DataSet.dll
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.csproj.AssemblyReference.cache
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\MainWindow.g.cs
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\App.g.cs
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql_MarkupCompile.cache
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql_MarkupCompile.lref
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\MainWindow.baml
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.g.resources
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.AssemblyInfoInputs.cache
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.AssemblyInfo.cs
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.csproj.CoreCompileInputs.cache
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.csproj.CopyComplete
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.dll
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\ref\xls2sql.dll
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.pdb
+C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Release\net5.0-windows\xls2sql.genruntimeconfig.cache
