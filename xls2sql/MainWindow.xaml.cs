@@ -168,7 +168,7 @@ namespace xls2sql
                 var dataSet = excelReader.AsDataSet();
                 var dataTable = dataSet.Tables[workbookIndex];
 
-                List<string> headers = GetColumnNames(excelReader, trimWhiteSpaces);
+                List<string> headers = GetColumnNames(dataTable, trimWhiteSpaces);
                 string columnNames = GenerateColumnNames(headers);
 
                 if (isCreateTable)
@@ -232,16 +232,18 @@ namespace xls2sql
             }
         }
 
-        private List<string> GetColumnNames(IExcelDataReader excelReader, bool trimWhiteSpaces)
+        private List<string> GetColumnNames(DataTable dataTable, bool trimWhiteSpaces)
         {
             var headers = new List<string>();
 
-            if (excelReader.Read())
+            foreach (DataRow row in dataTable.Rows)
             {
-                for (var i = 0; i < excelReader.FieldCount; i++)
+                foreach (var column in row.ItemArray)
                 {
-                    headers.Add(Regex.Replace(trimWhiteSpaces ? Convert.ToString(excelReader[i]).Trim() : Convert.ToString(excelReader[i]), @"\t|\n|\r", ""));
+                    headers.Add(Regex.Replace(trimWhiteSpaces ? Convert.ToString(column).Trim() : Convert.ToString(column), @"\t|\n|\r", ""));
                 }
+
+                return headers;
             }
 
             return headers;

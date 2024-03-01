@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\OneDrive - Rare Crew\\Source\\dhaliscak\\xls2sql-main\\xls2sql\\xls2sql.csproj": {}
+    "C:\\xampp\\htdocs\\xls2sql\\xls2sql\\xls2sql.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\OneDrive - Rare Crew\\Source\\dhaliscak\\xls2sql-main\\xls2sql\\xls2sql.csproj": {
+    "C:\\xampp\\htdocs\\xls2sql\\xls2sql\\xls2sql.csproj": {
       "version": "1.1.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\OneDrive - Rare Crew\\Source\\dhaliscak\\xls2sql-main\\xls2sql\\xls2sql.csproj",
+        "projectUniqueName": "C:\\xampp\\htdocs\\xls2sql\\xls2sql\\xls2sql.csproj",
         "projectName": "xls2sql",
-        "projectPath": "C:\\Users\\user\\OneDrive - Rare Crew\\Source\\dhaliscak\\xls2sql-main\\xls2sql\\xls2sql.csproj",
+        "projectPath": "C:\\xampp\\htdocs\\xls2sql\\xls2sql\\xls2sql.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\OneDrive - Rare Crew\\Source\\dhaliscak\\xls2sql-main\\xls2sql\\obj\\",
+        "outputPath": "C:\\xampp\\htdocs\\xls2sql\\xls2sql\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
