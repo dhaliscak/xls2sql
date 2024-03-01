@@ -143,7 +143,7 @@ namespace xls2sql
             bool isCreateTable = ckbCreateTable.IsChecked ?? false;
             string filePath = txtFilepath.Text.Trim();
 
-            int separator = txtSeparator.Text == "" ? 1000 : Int32.Parse(txtSeparator.Text);
+            int separator = (txtSeparator.Text == "" || Int32.Parse(txtSeparator.Text) < 1) ? 1000 : Int32.Parse(txtSeparator.Text);
             bool prefferNulls = ckbPrefferNulls.IsChecked ?? false;
             bool trimWhiteSpaces = ckbTrimWhiteSpaces.IsChecked ?? false;
             int workbookIndex = cmbWorkbook.SelectedIndex;

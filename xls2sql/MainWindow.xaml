@@ -1,73 +1,191 @@
-﻿<Window x:Class="xls2sql.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:xls2sql"
-        mc:Ignorable="d"
-        Title="xls2sql 1.2 (by Daniel Haliscak)" 
-        Height="450" 
-        Width="800"
-        ResizeMode="CanResizeWithGrip">
+﻿<Window
+    x:Class="xls2sql.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:xls2sql"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="xls2sql 1.2 (by Daniel Haliscak)"
+    Width="800"
+    Height="450"
+    ResizeMode="CanResizeWithGrip"
+    mc:Ignorable="d">
     <Grid>
         <DockPanel Margin="10,10,9.6,10">
-            <WrapPanel HorizontalAlignment="left" DockPanel.Dock="Top" Margin="0,0,0,10">
-                <Label x:Name="Database" Content="Database" VerticalAlignment="Center" />
-                <TextBox Name="txtDatabaseName" Width="200" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="True" />
+            <WrapPanel
+                Margin="0,0,0,10"
+                HorizontalAlignment="left"
+                DockPanel.Dock="Top">
+                <Label
+                    x:Name="Database"
+                    VerticalAlignment="Center"
+                    Content="Database" />
+                <TextBox
+                    Name="txtDatabaseName"
+                    Width="200"
+                    Height="27"
+                    Margin="5,0,5,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="True"
+                    MaxLength="100"
+                    TextWrapping="NoWrap" />
 
-                <Label x:Name="Table" Content="Table" VerticalAlignment="Center" />
-                <TextBox Name="txtTableName" Width="200" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="True" />
+                <Label
+                    x:Name="Table"
+                    VerticalAlignment="Center"
+                    Content="Table" />
+                <TextBox
+                    Name="txtTableName"
+                    Width="200"
+                    Height="27"
+                    Margin="5,0,5,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="True"
+                    MaxLength="100"
+                    TextWrapping="NoWrap" />
 
-                <CheckBox FlowDirection="LeftToRight" Name="ckbCreateTable" VerticalAlignment="Center" Margin="10,0,10,0" IsChecked="True">
+                <CheckBox
+                    Name="ckbCreateTable"
+                    Margin="10,0,10,0"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    IsChecked="True">
                     <TextBlock FlowDirection="LeftToRight" Text="Generate CREATE TABLE Script" />
                 </CheckBox>
             </WrapPanel>
 
-            <WrapPanel HorizontalAlignment="left" DockPanel.Dock="Top" Margin="0,0,0,10">
-                <Label x:Name="FirstColumn" Content="First Column" VerticalAlignment="Center" />
-                <ComboBox Margin="5" Padding="5" Name="cmbFirstColumn" Width="150" SelectedIndex="0">
-                    <ComboBoxItem Content="None"/>
-                    <ComboBoxItem Content="Id (int, IDENTITY 1,1)"/>
-                    <ComboBoxItem Content="Id (NewSequentialId())"/>
+            <WrapPanel
+                Margin="0,0,0,10"
+                HorizontalAlignment="left"
+                DockPanel.Dock="Top">
+                <Label
+                    x:Name="FirstColumn"
+                    VerticalAlignment="Center"
+                    Content="First Column" />
+                <ComboBox
+                    Name="cmbFirstColumn"
+                    Width="150"
+                    Margin="5"
+                    Padding="5"
+                    SelectedIndex="0">
+                    <ComboBoxItem Content="None" />
+                    <ComboBoxItem Content="Id (int, IDENTITY 1,1)" />
+                    <ComboBoxItem Content="Id (NewSequentialId())" />
                 </ComboBox>
 
-                <Label x:Name="Separator" Content="Separator" VerticalAlignment="Center" />
-                <TextBox Name="txtSeparator" Width="100" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="True" Text="1000" UndoLimit="102" RenderTransformOrigin="0,0" PreviewTextInput="NumberValidationTextBox" />
+                <Label
+                    x:Name="Separator"
+                    VerticalAlignment="Center"
+                    Content="Separator" />
+                <TextBox
+                    Name="txtSeparator"
+                    Width="100"
+                    Height="27"
+                    Margin="5,0,5,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="True"
+                    PreviewTextInput="NumberValidationTextBox"
+                    RenderTransformOrigin="0,0"
+                    Text="1000"
+                    TextWrapping="NoWrap"
+                    UndoLimit="102" />
 
-                <CheckBox FlowDirection="LeftToRight" Name="ckbTrimWhiteSpaces" VerticalAlignment="Center" Margin="10,0,10,0" IsChecked="True">
+                <CheckBox
+                    Name="ckbTrimWhiteSpaces"
+                    Margin="10,0,10,0"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    IsChecked="True">
                     <TextBlock FlowDirection="LeftToRight" Text="Trim White Spaces" />
                 </CheckBox>
 
-                <CheckBox FlowDirection="LeftToRight" Name="ckbPrefferNulls" VerticalAlignment="Center" Margin="10,0,10,0" IsChecked="True">
+                <CheckBox
+                    Name="ckbPrefferNulls"
+                    Margin="10,0,10,0"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    IsChecked="True">
                     <TextBlock FlowDirection="LeftToRight" Text="Preffer Nulls" />
                 </CheckBox>
             </WrapPanel>
 
             <WrapPanel HorizontalAlignment="left" DockPanel.Dock="Top">
-                <Label x:Name="Path" Content="Path" VerticalAlignment="Center" />
-                <TextBox Name="txtFilepath" Width="250" TextWrapping="NoWrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="27" IsEnabled="False" >
+                <Label
+                    x:Name="Path"
+                    VerticalAlignment="Center"
+                    Content="Path" />
+                <TextBox
+                    Name="txtFilepath"
+                    Width="250"
+                    Height="27"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="False"
+                    TextWrapping="NoWrap">
                     <TextBox.Background>
-                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}" />
                     </TextBox.Background>
                 </TextBox>
-                <Button Margin="0,5,5,5" Padding="5" Name="btnOpenFile" Click="BtnOpenFile_Click">Open File</Button>
+                <Button
+                    Name="btnOpenFile"
+                    Margin="0,5,5,5"
+                    Padding="5"
+                    Click="BtnOpenFile_Click">
+                    Open File
+                </Button>
 
-                <ComboBox Margin="5" Padding="5" Name="cmbWorkbook" Width="100" Visibility="Collapsed">
-                </ComboBox>
+                <ComboBox
+                    Name="cmbWorkbook"
+                    Width="100"
+                    Margin="5"
+                    Padding="5"
+                    Visibility="Collapsed" />
 
-                <Button Margin="5" Padding="5" Name="btnExecute" Click="BtnExecute_Click">Generate</Button>
+                <Button
+                    Name="btnExecute"
+                    Margin="5"
+                    Padding="5"
+                    Click="BtnExecute_Click">
+                    Generate
+                </Button>
             </WrapPanel>
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition />
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Content="Output" VerticalAlignment="Center" />
-                <TextBox Grid.Row="1" Name="txtEditor" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Margin="0,0,0,0" />
-                <TextBlock Grid.Row="2" Name="txtStatus" Text=""  HorizontalAlignment="Left" />
+                <Label
+                    Grid.Row="0"
+                    VerticalAlignment="Center"
+                    Content="Output" />
+                <TextBox
+                    Name="txtEditor"
+                    Grid.Row="1"
+                    Margin="0,0,0,0"
+                    HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.CanContentScroll="True"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Visible" />
+                <TextBlock
+                    Name="txtStatus"
+                    Grid.Row="2"
+                    HorizontalAlignment="Left"
+                    Text="" />
             </Grid>
 
         </DockPanel>
