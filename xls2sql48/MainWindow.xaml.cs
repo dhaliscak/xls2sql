@@ -44,12 +44,13 @@ namespace xls2sql48
                 var filePath = openFileDialog.FileName;
                 txtFilepath.Text = filePath;
 
-                // Configure the reader to treat the first row as headers
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
                 var readerConfig = new ExcelReaderConfiguration()
                 {
                     FallbackEncoding = Encoding.GetEncoding(1250),
                     AutodetectSeparators = new char[] { ',', ';', '\t' },
-                    LeaveOpen = true,
+                    LeaveOpen = false,
                 };
 
                 try
@@ -158,7 +159,7 @@ namespace xls2sql48
             {
                 FallbackEncoding = Encoding.GetEncoding(1250),
                 AutodetectSeparators = new char[] { ',', ';', '\t' },
-                LeaveOpen = true,
+                LeaveOpen = false,
             };
 
             using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
@@ -167,12 +168,12 @@ namespace xls2sql48
                 var dataSet = excelReader.AsDataSet();
                 var dataTable = dataSet.Tables[workbookIndex];
 
-                List<string> headers = GetColumnNames(excelReader);
-                string columnNames = GenerateColumnNames(headers, trimWhiteSpaces);
+                List<string> headers = GetColumnNames(excelReader, trimWhiteSpaces);
+                string columnNames = GenerateColumnNames(headers);
 
                 if (isCreateTable)
                 {
-                    string columnNamesCreateTable = GenerateColumnNamesForCreateTable(headers, trimWhiteSpaces, firstColumnId);
+                    string columnNamesCreateTable = GenerateColumnNamesForCreateTable(headers, firstColumnId);
                     queryBuilder.AppendLine($"CREATE TABLE {tableName} ({columnNamesCreateTable});");
                     queryBuilder.AppendLine();
                 }
@@ -215,24 +216,24 @@ namespace xls2sql48
                 {
                     if (i > 0 && i % separator == 0)
                     {
-                        valuesBuilder.Append($"{String.Join("', ", query)}");
+                        valuesBuilder.Append($"{String.Join(", ", query)}; ");
+                        valuesBuilder.AppendLine();
                         query.Clear();
                         valuesBuilder.AppendLine();
                         valuesBuilder.Append($"INSERT INTO {tableName} ({columnNames}) ");
                         valuesBuilder.AppendLine();
                         valuesBuilder.Append($"VALUES ");
-
                     }
                     query.Add(tableData[i]);
                 }
-                valuesBuilder.Append($"{String.Join(", ", query)} ");
+                valuesBuilder.Append($"{String.Join(", ", query)}; ");
 
-                return $"{queryBuilder.ToString()}{valuesBuilder}";
+                return $"{queryBuilder}{valuesBuilder}";
             }
 
         }
 
-        private List<string> GetColumnNames(IExcelDataReader excelReader)
+        private List<string> GetColumnNames(IExcelDataReader excelReader, bool trimWhiteSpaces)
         {
             var headers = new List<string>();
 
@@ -240,28 +241,24 @@ namespace xls2sql48
             {
                 for (var i = 0; i < excelReader.FieldCount; i++)
                 {
-                    headers.Add(Regex.Replace(Convert.ToString(excelReader[i]), @"\t|\n|\r", ""));
+                    headers.Add(Regex.Replace(trimWhiteSpaces ? Convert.ToString(excelReader[i]).Trim() : Convert.ToString(excelReader[i]), @"\t|\n|\r", ""));
                 }
             }
-
+            
             return headers;
         }
 
-        private string GenerateColumnNames(List<string> headers, bool trimWhiteSpaces)
+        private string GenerateColumnNames(List<string> headers)
         {
 
             StringBuilder columnNamesBuilder = new StringBuilder();
-            
-            foreach (var column in headers)
-            {
-                string columnName = trimWhiteSpaces ? column.Trim() : column;
-                columnNamesBuilder.Append($"[{columnName}], ");
-            }
 
-            return columnNamesBuilder.ToString().TrimEnd(' ', ',');
+            columnNamesBuilder.Append($"[{String.Join("], [", headers)}]");
+
+            return columnNamesBuilder.ToString();
         }
 
-        private string GenerateColumnNamesForCreateTable(List<string> headers, bool trimWhiteSpaces, int firstColumnId = 0)
+        private string GenerateColumnNamesForCreateTable(List<string> headers, int firstColumnId = 0)
         {
             StringBuilder columnNamesBuilder = new StringBuilder();
 
@@ -277,13 +274,16 @@ namespace xls2sql48
                     break;
             }
 
-            foreach (var column in headers)
-            {
-                string columnName = trimWhiteSpaces ? column.Trim() : column;
-                columnNamesBuilder.Append($"[{columnName}] varchar(max) NULL, ");
-            }
+            columnNamesBuilder.Append($"[{String.Join("] varchar(max) NULL, [", headers)}] varchar(max) NULL");
+            return columnNamesBuilder.ToString();
 
-            return columnNamesBuilder.ToString().TrimEnd(' ', ',');
+            //foreach (var column in headers)
+            //{
+            //    string columnName = trimWhiteSpaces ? column.Trim() : column;
+            //    columnNamesBuilder.Append($"[{columnName}] varchar(max) NULL, ");
+            //}
+
+            //return columnNamesBuilder.ToString().TrimEnd(' ', ',');
         }
     }
 }
