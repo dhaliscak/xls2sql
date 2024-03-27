@@ -71,28 +71,3 @@ C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Deb
 C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Debug\net5.0-windows\ref\xls2sql.dll
 C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Debug\net5.0-windows\xls2sql.pdb
 C:\Users\user\OneDrive - Rare Crew\Source\dhaliscak\xls2sql-main\xls2sql\obj\Debug\net5.0-windows\xls2sql.genruntimeconfig.cache
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.exe
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.deps.json
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.runtimeconfig.json
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.runtimeconfig.dev.json
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.dll
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\ref\xls2sql.dll
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\xls2sql.pdb
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\ExcelDataReader.dll
-C:\xampp\htdocs\xls2sql\xls2sql\bin\Debug\net5.0-windows\ExcelDataReader.DataSet.dll
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.csproj.AssemblyReference.cache
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\MainWindow.g.cs
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\App.g.cs
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql_MarkupCompile.cache
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql_MarkupCompile.lref
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\MainWindow.baml
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.g.resources
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.GeneratedMSBuildEditorConfig.editorconfig
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.AssemblyInfoInputs.cache
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.AssemblyInfo.cs
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.csproj.CoreCompileInputs.cache
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.csproj.CopyComplete
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.dll
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\ref\xls2sql.dll
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.pdb
-C:\xampp\htdocs\xls2sql\xls2sql\obj\Debug\net5.0-windows\xls2sql.genruntimeconfig.cache
