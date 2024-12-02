@@ -1,6 +1,0 @@
-C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\publish\xls2sql.exe
-C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\publish\xls2sql.dll
-C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\publish\xls2sql.runtimeconfig.json
-C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\publish\xls2sql.dll.config
-C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\publish\xls2sql.pdb
-C:\Source\dhaliscak\xls2sql\xls2sql\bin\Release\net5.0-windows\publish\xls2sql.deps.json
