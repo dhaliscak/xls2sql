@@ -10,8 +10,11 @@ Do you have data in spreadsheet and you need to quickly create INSERT script? Pe
 Download content of following folder https://github.com/dhaliscak/xls2sql/tree/main/download and run .exe file
 
 # Changelog
+## v2.1
+- added option to drag & file
+
 ## v2.0
-- added .net framework 4.8 project
+- added .NET Framework 4.8 project as it by default in Windows (if you don't want to install .NET 5, you can try .NET Framework 4.8 first)
 
 ## v1.2
 - Removed settings from config file and added them on UI

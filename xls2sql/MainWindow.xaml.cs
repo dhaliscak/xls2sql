@@ -162,73 +162,81 @@ namespace xls2sql
                 LeaveOpen = false,
             };
 
-            using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
-            using (IExcelDataReader excelReader = ExcelReaderFactory.CreateReader(stream, readerConfig))
+            try
             {
-                var dataSet = excelReader.AsDataSet();
-                var dataTable = dataSet.Tables[workbookIndex];
-
-                List<string> headers = GetColumnNames(dataTable, trimWhiteSpaces);
-                string columnNames = GenerateColumnNames(headers);
-
-                if (isCreateTable)
+                using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+                using (IExcelDataReader excelReader = ExcelReaderFactory.CreateReader(stream, readerConfig))
                 {
-                    string columnNamesCreateTable = GenerateColumnNamesForCreateTable(headers, firstColumnId);
-                    queryBuilder.AppendLine($"CREATE TABLE {tableName} ({columnNamesCreateTable});");
-                    queryBuilder.AppendLine();
-                }
+                    var dataSet = excelReader.AsDataSet();
+                    var dataTable = dataSet.Tables[workbookIndex];
 
-                var index = 0;
-                List<object> rowData = null;
-                List<string> tableData = new List<string>();
+                    List<string> headers = GetColumnNames(dataTable, trimWhiteSpaces);
+                    string columnNames = GenerateColumnNames(headers);
 
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    List<string> queryRowData = new List<string>();
-                    rowData = row.ItemArray.ToList();
-
-                    if (index > 0)
+                    if (isCreateTable)
                     {
-                        foreach (var data in rowData)
-                        {
-                            string value = data.ToString().Replace("'", "''");
-                            value = trimWhiteSpaces ? value.Trim() : value;
-                            queryRowData.Add(value);
-                        }
-
-                        var temp = $"('{String.Join("', N'", queryRowData)}')";
-                        if (prefferNulls)
-                        {
-                            temp = temp.ToString().Replace("N'NULL'", "NULL").Replace("N''", "NULL");
-                        }
-                        tableData.Add(temp);
+                        string columnNamesCreateTable = GenerateColumnNamesForCreateTable(headers, firstColumnId);
+                        queryBuilder.AppendLine($"CREATE TABLE {tableName} ({columnNamesCreateTable});");
+                        queryBuilder.AppendLine();
                     }
-                    index++;
-                }
 
-                StringBuilder valuesBuilder = new StringBuilder();
-                List<string> query = new List<string>();
-                valuesBuilder.Append($"INSERT INTO {tableName} ({columnNames}) ");
-                valuesBuilder.AppendLine();
-                valuesBuilder.Append($"VALUES ");
+                    var index = 0;
+                    List<object> rowData = null;
+                    List<string> tableData = new List<string>();
 
-                for (var i = 0; i < tableData.Count; i++)
-                {
-                    if (i > 0 && i % separator == 0)
+                    foreach (DataRow row in dataTable.Rows)
                     {
-                        valuesBuilder.Append($"{String.Join(", ", query)}; ");
-                        valuesBuilder.AppendLine();
-                        query.Clear();
-                        valuesBuilder.AppendLine();
-                        valuesBuilder.Append($"INSERT INTO {tableName} ({columnNames}) ");
-                        valuesBuilder.AppendLine();
-                        valuesBuilder.Append($"VALUES ");
-                    }
-                    query.Add(tableData[i]);
-                }
-                valuesBuilder.Append($"{String.Join(", ", query)}; ");
+                        List<string> queryRowData = new List<string>();
+                        rowData = row.ItemArray.ToList();
 
-                return $"{queryBuilder}{valuesBuilder}";
+                        if (index > 0)
+                        {
+                            foreach (var data in rowData)
+                            {
+                                string value = data.ToString().Replace("'", "''");
+                                value = trimWhiteSpaces ? value.Trim() : value;
+                                queryRowData.Add(value);
+                            }
+
+                            var temp = $"('{String.Join("', N'", queryRowData)}')";
+                            if (prefferNulls)
+                            {
+                                temp = temp.ToString().Replace("N'NULL'", "NULL").Replace("N''", "NULL");
+                            }
+                            tableData.Add(temp);
+                        }
+                        index++;
+                    }
+
+                    StringBuilder valuesBuilder = new StringBuilder();
+                    List<string> query = new List<string>();
+                    valuesBuilder.Append($"INSERT INTO {tableName} ({columnNames}) ");
+                    valuesBuilder.AppendLine();
+                    valuesBuilder.Append($"VALUES ");
+
+                    for (var i = 0; i < tableData.Count; i++)
+                    {
+                        if (i > 0 && i % separator == 0)
+                        {
+                            valuesBuilder.Append($"{String.Join(", ", query)}; ");
+                            valuesBuilder.AppendLine();
+                            query.Clear();
+                            valuesBuilder.AppendLine();
+                            valuesBuilder.Append($"INSERT INTO {tableName} ({columnNames}) ");
+                            valuesBuilder.AppendLine();
+                            valuesBuilder.Append($"VALUES ");
+                        }
+                        query.Add(tableData[i]);
+                    }
+                    valuesBuilder.Append($"{String.Join(", ", query)}; ");
+
+                    return $"{queryBuilder}{valuesBuilder}";
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error Occured", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return $"";
             }
         }
 
@@ -277,14 +285,93 @@ namespace xls2sql
 
             columnNamesBuilder.Append($"[{String.Join("] varchar(max) NULL, [", headers)}] varchar(max) NULL");
             return columnNamesBuilder.ToString();
+        }
 
-            //foreach (var column in headers)
-            //{
-            //    string columnName = trimWhiteSpaces ? column.Trim() : column;
-            //    columnNamesBuilder.Append($"[{columnName}] varchar(max) NULL, ");
-            //}
+        private void TxtFilepath_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = true;
+        }
 
-            //return columnNamesBuilder.ToString().TrimEnd(' ', ',');
+        private void TxtFilepath_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length == 1)
+                {
+                    Stopwatch timer = new Stopwatch();
+
+                    string filePath = files[0];
+
+                    // Ensure the file is an Excel file before setting the path
+                    if (filePath.EndsWith(".xls", StringComparison.OrdinalIgnoreCase) ||
+                        filePath.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase) ||
+                        filePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                    {
+                        txtFilepath.Text = filePath;
+
+                        timer.Start();
+
+                        System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+                        var readerConfig = new ExcelReaderConfiguration()
+                        {
+                            FallbackEncoding = Encoding.GetEncoding(1250),
+                            AutodetectSeparators = new char[] { ',', ';', '\t' },
+                            LeaveOpen = false,
+                        };
+
+                        try
+                        {
+                            using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+                            using (IExcelDataReader excelReader = ExcelReaderFactory.CreateReader(stream, readerConfig))
+                            {
+                                DataSet dataSet = excelReader.AsDataSet();
+                                int totalTables = dataSet.Tables.Count;
+
+                                string[] tablesNames = new string[totalTables];
+                                for (int tableid = 0; tableid < totalTables; tableid++)
+                                {
+                                    tablesNames[tableid] = dataSet.Tables[tableid].TableName;
+                                }
+
+                                if (totalTables > 1)
+                                {
+                                    cmbWorkbook.ItemsSource = tablesNames;
+                                    cmbWorkbook.Visibility = Visibility.Visible;
+                                    cmbWorkbook.SelectedIndex = -1;
+                                }
+                                else
+                                {
+                                    cmbWorkbook.ItemsSource = tablesNames;
+                                    cmbWorkbook.Visibility = Visibility.Collapsed;
+                                    cmbWorkbook.SelectedIndex = 0;
+                                }
+                            }
+                        }
+                        catch (Exception er)
+                        {
+                            ShowError(er);
+                        }
+
+                        timer.Stop();
+                        txtStatus.Text = $"File Loading Time: {timer.ElapsedMilliseconds}ms";
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Only Excel files (.xls, .xlsx, .csv) are supported.", "Invalid File", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\xls2sql"
+    "\\xls2sql",
+    "\\xls2sql48",
+    "\\xls2sql\\Properties\\PublishProfiles"
   ],
-  "SelectedNode": "\\xls2sql\\xls2sql.csproj",
+  "SelectedNode": "\\xls2sql\\AssemblyInfo.cs",
   "PreviewInSolutionExplorer": false
 }
