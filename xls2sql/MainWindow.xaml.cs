@@ -191,19 +191,26 @@ namespace xls2sql
 
                         if (index > 0)
                         {
+                            var j = 0;
                             foreach (var data in rowData)
                             {
+                                if (j >= headers.Count())
+                                {
+                                    break;
+                                }
+
                                 string value = data.ToString().Replace("'", "''");
                                 value = trimWhiteSpaces ? value.Trim() : value;
+                                value = value == "" && prefferNulls ? "NULL" : value;
                                 queryRowData.Add(value);
+
+                                j++;
                             }
 
-                            var temp = $"('{String.Join("', N'", queryRowData)}')";
-                            if (prefferNulls)
-                            {
-                                temp = temp.ToString().Replace("N'NULL'", "NULL").Replace("N''", "NULL");
-                            }
-                            tableData.Add(temp);
+                            var rowString = $"('{String.Join("', N'", queryRowData)}')";
+                            rowString = prefferNulls ? rowString.ToString().Replace("N'NULL'", "NULL") : rowString;
+
+                            tableData.Add(rowString);
                         }
                         index++;
                     }
@@ -244,14 +251,25 @@ namespace xls2sql
         {
             var headers = new List<string>();
 
-            foreach (DataRow row in dataTable.Rows)
+            if (dataTable.Rows.Count > 0)
             {
-                foreach (var column in row.ItemArray)
-                {
-                    headers.Add(Regex.Replace(trimWhiteSpaces ? Convert.ToString(column).Trim() : Convert.ToString(column), @"\t|\n|\r", ""));
-                }
+                DataRow firstRow = dataTable.Rows[0];
 
-                return headers;
+                foreach (var column in firstRow.ItemArray)
+                {
+                    string header = Convert.ToString(column);
+                    if (trimWhiteSpaces)
+                    {
+                        header = header.Trim();
+                    }
+                    header = Regex.Replace(header, @"\t|\n|\r", "");
+
+                    // Add header only if it's not empty
+                    if (!string.IsNullOrEmpty(header))
+                    {
+                        headers.Add(header);
+                    }
+                }
             }
 
             return headers;
@@ -259,31 +277,42 @@ namespace xls2sql
 
         private string GenerateColumnNames(List<string> headers)
         {
+            if (headers == null || headers.Count == 0)
+            {
+                return string.Empty;
+            }
 
             StringBuilder columnNamesBuilder = new StringBuilder();
-
-            columnNamesBuilder.Append($"[{String.Join("], [", headers)}]");
+            columnNamesBuilder.Append($"[{string.Join("], [", headers)}]");
 
             return columnNamesBuilder.ToString();
         }
 
         private string GenerateColumnNamesForCreateTable(List<string> headers, int firstColumnId = 0)
         {
+            if (headers == null || headers.Count == 0)
+            {
+                return string.Empty;
+            }
+
             StringBuilder columnNamesBuilder = new StringBuilder();
 
             switch (firstColumnId)
             {
-                case 0:
-                    break;
                 case 1:
-                    columnNamesBuilder.Append($"Id INT IDENTITY (1, 1) NOT NULL, ");
+                    columnNamesBuilder.Append("Id INT IDENTITY (1, 1) NOT NULL");
                     break;
                 case 2:
-                    columnNamesBuilder.Append($"Id UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() NOT NULL, ");
+                    columnNamesBuilder.Append("Id UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() NOT NULL");
                     break;
             }
 
-            columnNamesBuilder.Append($"[{String.Join("] varchar(max) NULL, [", headers)}] varchar(max) NULL");
+            if (firstColumnId != 0)
+            {
+                columnNamesBuilder.Append(", ");
+            }
+
+            columnNamesBuilder.Append($"[{string.Join("] varchar(max) NULL, [", headers)}] varchar(max) NULL");
             return columnNamesBuilder.ToString();
         }
 
