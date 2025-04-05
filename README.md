@@ -10,6 +10,10 @@ Do you have data in spreadsheet and you need to quickly create INSERT script? Pe
 Download content of following folder https://github.com/dhaliscak/xls2sql/tree/main/download and run .exe file
 
 # Changelog
+## v2.2
+- fixed: cell value starting with apostrophe
+- fixed: empty header value
+
 ## v2.1
 - added option to drag & file
 
