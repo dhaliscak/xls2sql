@@ -112,7 +112,38 @@ namespace xls2sql48
             }
         }
 
-        private string ValidateInputs()
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            string errors = ValidateInputs();
+
+            if (string.IsNullOrEmpty(errors))
+            {
+                Stopwatch timer = new Stopwatch();
+                timer.Start();
+
+                string query = GenerateSQLQuery();
+
+                // Path where the exe is located
+                string exePath = AppDomain.CurrentDomain.BaseDirectory;
+
+
+                // File name (you can make this dynamic if you want)
+                string fileName = string.IsNullOrEmpty(txtTableName.Text.Trim()) ? "tablename" : txtTableName.Text.Trim() + ".txt";
+                string filePath = System.IO.Path.Combine(exePath, fileName);
+
+                // Save query to txt file
+                File.WriteAllText(filePath, query);
+
+                timer.Stop();
+                txtStatus.Text = $"Saved to {fileName} | Execution Time: {timer.ElapsedMilliseconds}ms";
+            }
+            else
+            {
+                MessageBox.Show(errors, "xls2sql", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
+
+    private string ValidateInputs()
         {
             string errors = "";
             string filePath = txtFilepath.Text.Trim();
