@@ -4,34 +4,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-WPF desktop tool that converts Excel/CSV files into SQL INSERT (and optionally CREATE TABLE) scripts. Two parallel projects targeting different runtimes — both implement the same feature set.
-
-## Projects
-
-| Project | Target | Notes |
-|---------|--------|-------|
-| `xls2sql/` | .NET 5.0 (net5.0-windows) | Primary project |
-| `xls2sql48/` | .NET Framework 4.8 | Alternate for users without .NET 5 installed |
-
-Both use `ExcelDataReader` + `ExcelDataReader.DataSet` NuGet packages. The .NET 4.8 project uses `packages/` folder (packages.config); the .NET 5 project uses SDK-style PackageReference.
+WPF desktop tool that converts Excel/CSV files into SQL INSERT (and optionally CREATE TABLE) scripts. Single project (`xls2sql/xls2sql.csproj`) with multi-targeting for both .NET 5 and .NET Framework 4.8.
 
 ## Build
 
-Open `xls2sql.sln` in Visual Studio. No CLI build tooling is configured — build via VS or `msbuild`.
+Open `xls2sql.sln` in Visual Studio, or from CLI:
 
-Build from CLI (if msbuild available):
 ```
 msbuild xls2sql.sln /p:Configuration=Release
 ```
 
-Publish self-contained exe (net5.0 project):
+Publish self-contained exe (net5.0, win-x64):
 ```
 dotnet publish xls2sql/xls2sql.csproj -c Release -r win-x64 --self-contained
 ```
 
+Both targets use SDK-style `PackageReference` with `ExcelDataReader` + `ExcelDataReader.DataSet` v3.6.0.
+
 ## Architecture
 
-Both projects are single-window WPF apps with no MVVM — all logic lives in `MainWindow.xaml.cs`.
+Single-window WPF app with no MVVM — all logic lives in `xls2sql/MainWindow.xaml.cs`.
 
 **Flow:**
 1. User opens/drops a file → `LoadFile()` reads via `ExcelReaderFactory`, caches result in `_cachedDataSet` field
@@ -51,8 +43,6 @@ Both projects are single-window WPF apps with no MVVM — all logic lives in `Ma
 **SQL output dialect:** T-SQL (SQL Server). Uses `USE {db}`, `SET ANSI_NULLS ON`, bracketed column names `[col]`, `varchar(max)` for all columns.
 
 **Cell value escaping:** single quotes escaped as `''`. NULL preference: empty string → `NULL` when "Prefer Nulls" checked. Note: the `N'` Unicode prefix is only applied from the second column onward (artifact of `string.Join("', N'", ...)` — intentional behavior to preserve).
-
-**`xls2sql48/ExcelHelper.cs`** — dead code; not used by `MainWindow`. Was an OleDb-based reader from an earlier version.
 
 ## UI Controls (MainWindow.xaml)
 
