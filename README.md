@@ -10,6 +10,9 @@ Do you have data in spreadsheet and you need to quickly create INSERT script? Pe
 Download content of following folder https://github.com/dhaliscak/xls2sql/tree/main/download and run .exe file
 
 # Changelog
+## v3.0
+- improved built logic, no more duplicated code, instead doing Multi-targeting
+
 ## v2.4
 - AI optimized code
 

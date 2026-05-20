@@ -7,7 +7,9 @@ namespace xls2sql
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+#if NET5_0_OR_GREATER
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
             base.OnStartup(e);
         }
     }
