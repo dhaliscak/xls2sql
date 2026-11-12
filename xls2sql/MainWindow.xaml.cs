@@ -1,14 +1,13 @@
-using ExcelDataReader;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
+using System.Runtime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace xls2sql
@@ -16,15 +15,14 @@ namespace xls2sql
     public partial class MainWindow : Window
     {
         private static readonly Regex _nonDigits = new Regex("[^0-9]+", RegexOptions.Compiled);
-        private static readonly Regex _lineBreaks = new Regex(@"\t|\n|\r", RegexOptions.Compiled);
-        private static readonly ExcelReaderConfiguration _readerConfig = new ExcelReaderConfiguration
-        {
-            FallbackEncoding = Encoding.GetEncoding(1250),
-            AutodetectSeparators = new char[] { ',', ';', '\t' },
-            LeaveOpen = false,
-        };
 
-        private DataSet _cachedDataSet;
+        private string _loadedFilePath;
+        private string[] _sheetNames;
+        private SqlOutput _output;
+
+        // Parsed sheets of the loaded file, keyed by sheet name. Only touched on the UI thread.
+        // Each sheet is read once in the background (on load / selection) and reused by every Generate/Save.
+        private readonly Dictionary<string, Task<SheetData>> _sheetCache = new Dictionary<string, Task<SheetData>>();
 
         public MainWindow()
         {
@@ -41,16 +39,11 @@ namespace xls2sql
             var timer = Stopwatch.StartNew();
             try
             {
-                using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
-                using (var excelReader = ExcelReaderFactory.CreateReader(stream, _readerConfig))
-                {
-                    _cachedDataSet = excelReader.AsDataSet();
-                }
-
-                int totalTables = _cachedDataSet.Tables.Count;
-                string[] tableNames = new string[totalTables];
-                for (int i = 0; i < totalTables; i++)
-                    tableNames[i] = _cachedDataSet.Tables[i].TableName;
+                string[] tableNames = SheetReader.ReadSheetNames(filePath);
+                int totalTables = tableNames.Length;
+                _loadedFilePath = filePath;
+                _sheetNames = tableNames;
+                _sheetCache.Clear();
 
                 cmbWorkbook.ItemsSource = tableNames;
                 if (totalTables > 1)
@@ -70,6 +63,24 @@ namespace xls2sql
             }
 
             txtStatus.Text = $"File Loading Time: {timer.ElapsedMilliseconds}ms";
+        }
+
+        private void CmbWorkbook_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Start parsing the selected sheet right away so Generate/Save only has to format.
+            if (_sheetNames != null && cmbWorkbook.SelectedIndex >= 0)
+                GetSheetData(_sheetNames[cmbWorkbook.SelectedIndex]);
+        }
+
+        private Task<SheetData> GetSheetData(string sheetName)
+        {
+            if (!_sheetCache.TryGetValue(sheetName, out Task<SheetData> task) || task.IsFaulted || task.IsCanceled)
+            {
+                string filePath = _loadedFilePath;
+                task = Task.Run(() => SheetReader.Load(filePath, sheetName));
+                _sheetCache[sheetName] = task;
+            }
+            return task;
         }
 
         private void BtnOpenFile_Click(object sender, RoutedEventArgs e)
@@ -99,12 +110,36 @@ namespace xls2sql
             SetButtonsEnabled(false);
             var timer = Stopwatch.StartNew();
 
-            SqlSettings settings = ReadSettings();
-            string query = await Task.Run(() => GenerateSQLQuery(settings));
+            // Drop the previous result first so old and new output are never alive together.
+            _output = null;
+            txtEditor.Clear();
+            btnCopyAll.Visibility = Visibility.Collapsed;
 
-            txtEditor.Text = query;
+            SqlSettings settings = ReadSettings();
+            SqlOutput output = await GenerateSQLQueryAsync(settings);
+            OutputIndex index = await Task.Run(() => OutputIndex.Build(output));
+
+            _output = output;
+            txtEditor.SetOutput(index);
+            btnCopyAll.Visibility = output.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+
             txtStatus.Text = $"Execution Time: {timer.ElapsedMilliseconds}ms";
             SetButtonsEnabled(true);
+
+            ReleaseFreedMemory();
+        }
+
+        // Generation leaves large temporary buffers on the large object heap, which the GC neither
+        // compacts nor returns to Windows by default; compact once so Task Manager reflects real use.
+        private static void ReleaseFreedMemory()
+        {
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+#if NET7_0_OR_GREATER
+            // Aggressive also decommits the freed regions (~0.5 GB less private memory on big files).
+            GC.Collect(2, GCCollectionMode.Aggressive, blocking: true, compacting: true);
+#else
+            GC.Collect();
+#endif
         }
 
         private async void BtnSave_Click(object sender, RoutedEventArgs e)
@@ -120,14 +155,52 @@ namespace xls2sql
             var timer = Stopwatch.StartNew();
 
             SqlSettings settings = ReadSettings();
-            string query = await Task.Run(() => GenerateSQLQuery(settings));
+            SqlOutput output = await GenerateSQLQueryAsync(settings);
 
             string fileName = string.IsNullOrEmpty(settings.TableName) ? "tablename.txt" : settings.TableName + ".txt";
             string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
-            await Task.Run(() => File.WriteAllText(filePath, query));
+            // Same bytes as File.WriteAllText (UTF-8, no BOM), streamed chunk by chunk.
+            await Task.Run(() =>
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 1 << 16))
+                    output.WriteTo(stream);
+            });
 
             txtStatus.Text = $"Saved to {fileName} | Execution Time: {timer.ElapsedMilliseconds}ms";
             SetButtonsEnabled(true);
+
+            output = null;
+            ReleaseFreedMemory();
+        }
+
+        private void BtnCopyAll_Click(object sender, RoutedEventArgs e)
+        {
+            if (_output == null) return;
+            try
+            {
+                string text = _output.ToText();
+                // copy: true keeps the text on the clipboard after the app exits.
+                Clipboard.SetDataObject(text, true);
+                txtStatus.Text = $"Copied {text.Length} characters";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not copy to clipboard: {ex.Message}", "xls2sql", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private async Task<SqlOutput> GenerateSQLQueryAsync(SqlSettings settings)
+        {
+            try
+            {
+                SheetData data = await GetSheetData(settings.SheetName);
+                return await Task.Run(() => SqlGenerator.Generate(settings, data));
+            }
+            catch
+            {
+                MessageBox.Show("Error Occurred", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return SqlOutput.Empty;
+            }
         }
 
         private void SetButtonsEnabled(bool enabled)
@@ -145,7 +218,8 @@ namespace xls2sql
             PreferNulls = ckbPrefferNulls.IsChecked ?? false,
             TrimWhiteSpaces = ckbTrimWhiteSpaces.IsChecked ?? false,
             FirstColumnId = cmbFirstColumn.SelectedIndex,
-            DataTable = _cachedDataSet.Tables[cmbWorkbook.SelectedIndex],
+            FilePath = _loadedFilePath,
+            SheetName = _sheetNames[cmbWorkbook.SelectedIndex],
         };
 
         private string ValidateInputs()
@@ -156,117 +230,6 @@ namespace xls2sql
             if (cmbWorkbook.SelectedIndex == -1)
                 errors += "Workbook is not selected.\n";
             return errors;
-        }
-
-        private static string GenerateSQLQuery(SqlSettings s)
-        {
-            var queryBuilder = new StringBuilder();
-            queryBuilder.AppendLine($"USE {s.DatabaseName};");
-            queryBuilder.AppendLine("SET ANSI_NULLS ON;");
-            queryBuilder.AppendLine("SET QUOTED_IDENTIFIER ON;");
-            queryBuilder.AppendLine();
-
-            try
-            {
-                List<string> headers = GetColumnNames(s.DataTable, s.TrimWhiteSpaces);
-                string columnNames = GenerateColumnNames(headers);
-                int headerCount = headers.Count;
-
-                if (s.IsCreateTable)
-                {
-                    queryBuilder.AppendLine($"CREATE TABLE {s.TableName} ({GenerateColumnNamesForCreateTable(headers, s.FirstColumnId)});");
-                    queryBuilder.AppendLine();
-                }
-
-                var valuesBuilder = new StringBuilder();
-                valuesBuilder.Append($"INSERT INTO {s.TableName} ({columnNames}) ");
-                valuesBuilder.AppendLine();
-                valuesBuilder.Append("VALUES ");
-
-                var rowValues = new string[headerCount];
-                bool firstInBatch = true;
-                bool headerSkipped = false;
-                int dataRowCount = 0;
-
-                foreach (DataRow row in s.DataTable.Rows)
-                {
-                    if (!headerSkipped) { headerSkipped = true; continue; }
-
-                    object[] cells = row.ItemArray;
-                    int colCount = Math.Min(headerCount, cells.Length);
-
-                    for (int j = 0; j < colCount; j++)
-                    {
-                        string value = cells[j].ToString().Replace("'", "''");
-                        if (s.TrimWhiteSpaces) value = value.Trim();
-                        if (value.Length == 0 && s.PreferNulls) value = "NULL";
-                        rowValues[j] = value;
-                    }
-
-                    string rowString = $"('{string.Join("', N'", rowValues, 0, colCount)}')";
-                    if (s.PreferNulls) rowString = rowString.Replace("N'NULL'", "NULL");
-
-                    if (dataRowCount > 0 && dataRowCount % s.Separator == 0)
-                    {
-                        valuesBuilder.AppendLine(";");
-                        valuesBuilder.AppendLine();
-                        valuesBuilder.Append($"INSERT INTO {s.TableName} ({columnNames}) ");
-                        valuesBuilder.AppendLine();
-                        valuesBuilder.Append("VALUES ");
-                        firstInBatch = true;
-                    }
-
-                    if (!firstInBatch) valuesBuilder.Append(", ");
-                    valuesBuilder.Append(rowString);
-                    firstInBatch = false;
-                    dataRowCount++;
-                }
-
-                valuesBuilder.Append(";");
-                return queryBuilder.Append(valuesBuilder).ToString();
-            }
-            catch
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                    MessageBox.Show("Error Occurred", "Error", MessageBoxButton.OK, MessageBoxImage.Warning));
-                return string.Empty;
-            }
-        }
-
-        private static List<string> GetColumnNames(DataTable dataTable, bool trimWhiteSpaces)
-        {
-            var headers = new List<string>();
-            if (dataTable.Rows.Count == 0) return headers;
-
-            foreach (object column in dataTable.Rows[0].ItemArray)
-            {
-                string header = Convert.ToString(column);
-                if (trimWhiteSpaces) header = header.Trim();
-                header = _lineBreaks.Replace(header, "");
-                if (!string.IsNullOrEmpty(header))
-                    headers.Add(header);
-            }
-            return headers;
-        }
-
-        private static string GenerateColumnNames(List<string> headers)
-        {
-            if (headers == null || headers.Count == 0) return string.Empty;
-            return $"[{string.Join("], [", headers)}]";
-        }
-
-        private static string GenerateColumnNamesForCreateTable(List<string> headers, int firstColumnId = 0)
-        {
-            if (headers == null || headers.Count == 0) return string.Empty;
-
-            var sb = new StringBuilder();
-            if (firstColumnId == 1)
-                sb.Append("Id INT IDENTITY (1, 1) NOT NULL, ");
-            else if (firstColumnId == 2)
-                sb.Append("Id UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() NOT NULL, ");
-
-            sb.Append($"[{string.Join("] varchar(max) NULL, [", headers)}] varchar(max) NULL");
-            return sb.ToString();
         }
 
         private void TxtFilepath_PreviewDragOver(object sender, DragEventArgs e)
@@ -294,17 +257,5 @@ namespace xls2sql
             txtFilepath.Text = filePath;
             LoadFile(filePath);
         }
-    }
-
-    internal class SqlSettings
-    {
-        public string DatabaseName { get; set; }
-        public string TableName { get; set; }
-        public bool IsCreateTable { get; set; }
-        public int Separator { get; set; }
-        public bool PreferNulls { get; set; }
-        public bool TrimWhiteSpaces { get; set; }
-        public int FirstColumnId { get; set; }
-        public DataTable DataTable { get; set; }
     }
 }

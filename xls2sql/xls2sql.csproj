@@ -2,16 +2,17 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net5.0-windows;net48</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <Authors>Daniel Haliscak</Authors>
     <Copyright>Daniel Haliscak</Copyright>
-    <Version>1.1.0</Version>
+    <Version>3.1.0</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExcelDataReader" Version="3.6.0" />
-    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+    <PackageReference Include="Sylvan.Data.Csv" Version="1.4.4" />
+    <PackageReference Include="Sylvan.Data.Excel" Version="0.5.8" />
   </ItemGroup>
 </Project>

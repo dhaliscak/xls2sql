@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:xls2sql"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="xls2sql 3.0 (by Daniel Haliscak)"
+    Title="xls2sql 3.1 (by Daniel Haliscak)"
     Width="800"
     Height="450"
     ResizeMode="CanResizeWithGrip"
@@ -153,6 +153,7 @@
                     Width="100"
                     Margin="5"
                     Padding="5"
+                    SelectionChanged="CmbWorkbook_SelectionChanged"
                     Visibility="Collapsed" />
 
                 <Button
@@ -179,18 +180,34 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Label
-                    Grid.Row="0"
-                    VerticalAlignment="Center"
-                    Content="Output" />
-                <TextBox
-                    Name="txtEditor"
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Label VerticalAlignment="Center" Content="Output" />
+                    <Button
+                        Name="btnCopyAll"
+                        Margin="5,0,0,0"
+                        Padding="5,0"
+                        VerticalAlignment="Center"
+                        Click="BtnCopyAll_Click"
+                        Visibility="Collapsed">
+                        Copy All
+                    </Button>
+                </StackPanel>
+                <!--
+                    Virtualized viewer: draws only visible rows of the UTF-8 output.
+                    WPF TextBox needs ~25s to lay out a 30 MB script; AvalonEdit lays out each
+                    whole INSERT line (one line per batch) and balloons memory while scrolling.
+                -->
+                <Border
                     Grid.Row="1"
-                    Margin="0,0,0,0"
-                    HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.CanContentScroll="True"
-                    TextWrapping="Wrap"
-                    VerticalScrollBarVisibility="Visible" />
+                    BorderBrush="#FFABADB3"
+                    BorderThickness="1">
+                    <ScrollViewer
+                        CanContentScroll="True"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Visible">
+                        <local:OutputViewer x:Name="txtEditor" />
+                    </ScrollViewer>
+                </Border>
                 <TextBlock
                     Name="txtStatus"
                     Grid.Row="2"

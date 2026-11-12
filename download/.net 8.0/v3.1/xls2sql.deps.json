@@ -1,0 +1,57 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "xls2sql/3.1.0": {
+        "dependencies": {
+          "Sylvan.Data.Csv": "1.4.4",
+          "Sylvan.Data.Excel": "0.5.8"
+        },
+        "runtime": {
+          "xls2sql.dll": {}
+        }
+      },
+      "Sylvan.Data.Csv/1.4.4": {
+        "runtime": {
+          "lib/net6.0/Sylvan.Data.Csv.dll": {
+            "assemblyVersion": "1.4.4.0",
+            "fileVersion": "1.4.4.0"
+          }
+        }
+      },
+      "Sylvan.Data.Excel/0.5.8": {
+        "runtime": {
+          "lib/net8.0/Sylvan.Data.Excel.dll": {
+            "assemblyVersion": "0.5.8.0",
+            "fileVersion": "0.5.8.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "xls2sql/3.1.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sylvan.Data.Csv/1.4.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1xZkDQ29uW2Y37NMN2nNkD59pFv8icaiu1WGmbE98m9n6jNL3IO3aM3rK4Uf6RgI+BFKbf7S5DdZA6nu5g9COw==",
+      "path": "sylvan.data.csv/1.4.4",
+      "hashPath": "sylvan.data.csv.1.4.4.nupkg.sha512"
+    },
+    "Sylvan.Data.Excel/0.5.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LHv82PtI577UG4gVgvWp9m40nowSBYrjZ6BAnWbfx++sRSugBFUODkxJWMwtZ7g4XI5lZE6I6oJu0DRP1yoZaA==",
+      "path": "sylvan.data.excel/0.5.8",
+      "hashPath": "sylvan.data.excel.0.5.8.nupkg.sha512"
+    }
+  }
+}

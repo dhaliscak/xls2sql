@@ -4,12 +4,26 @@ Do you have data in spreadsheet and you need to quickly create INSERT script? Pe
 # About app
 - C#
 - WPF
-- .NET 5.0
+- .NET 8.0 and .NET Framework 4.8 (multi-targeting)
 
 # Download
 Download content of following folder https://github.com/dhaliscak/xls2sql/tree/main/download and run .exe file
+- `download/.net 8.0/v3.1` - requires .NET 8 Desktop Runtime
+- `download/.net 4.8/v3.1` - runs on .NET Framework 4.8 (included in Windows 10/11)
 
 # Changelog
+## v3.1
+- upgraded from .NET 5.0 to .NET 8.0 (.NET Framework 4.8 build still available)
+- replaced ExcelDataReader with Sylvan.Data.Excel / Sylvan.Data.Csv (faster reading, added .xlsb support)
+- CSV: auto-detected delimiter, Windows-1250 fallback encoding
+- Excel dates exported as ISO 8601 (`2024-03-07T13:05:00`, `2024-12-31` for date-only)
+- sheet is loaded in background right after selection and cached
+- SQL generated in parallel, output kept as UTF-8 chunks (half the memory, no 2 GB limit for huge scripts)
+- new virtualized output viewer: instant display and scrolling of very large scripts, mouse selection, Ctrl+C, Ctrl+A, context menu
+- added "Copy All" button next to Output label
+- Save streams output to file without building one big string
+- memory released after each generate
+
 ## v3.0
 - improved built logic, no more duplicated code, instead doing Multi-targeting
 
