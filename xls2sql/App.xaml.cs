@@ -10,7 +10,14 @@ namespace xls2sql
 #if NET5_0_OR_GREATER
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
+            ThemeManager.Initialize();
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            ThemeManager.Shutdown();
+            base.OnExit(e);
         }
     }
 }

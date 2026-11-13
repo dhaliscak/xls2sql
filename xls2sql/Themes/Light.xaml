@@ -1,0 +1,33 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  Light palette. Dark.xaml must define the same keys; ThemeManager swaps the two.  -->
+    <SolidColorBrush x:Key="Theme.WindowBackground" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="Theme.Foreground" Color="#FF1A1A1A" />
+    <SolidColorBrush x:Key="Theme.ForegroundDisabled" Color="#FF8A8A8A" />
+
+    <SolidColorBrush x:Key="Theme.ControlBackground" Color="#FFEDEDED" />
+    <SolidColorBrush x:Key="Theme.ControlBackgroundHover" Color="#FFE5F1FB" />
+    <SolidColorBrush x:Key="Theme.ControlBackgroundPressed" Color="#FFCCE4F7" />
+    <SolidColorBrush x:Key="Theme.ControlBorder" Color="#FFADADAD" />
+    <SolidColorBrush x:Key="Theme.ControlBorderHover" Color="#FF0078D7" />
+    <SolidColorBrush x:Key="Theme.Accent" Color="#FF0078D7" />
+    <SolidColorBrush x:Key="Theme.CheckGlyph" Color="#FFFFFFFF" />
+
+    <SolidColorBrush x:Key="Theme.InputBackground" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="Theme.InputReadOnlyBackground" Color="#FFF0F0F0" />
+    <SolidColorBrush x:Key="Theme.InputBorder" Color="#FFABADB3" />
+
+    <SolidColorBrush x:Key="Theme.PopupBackground" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="Theme.ItemHover" Color="#FFE5F1FB" />
+    <SolidColorBrush x:Key="Theme.ItemSelected" Color="#FFCCE4F7" />
+
+    <SolidColorBrush x:Key="Theme.ScrollTrack" Color="#FFF0F0F0" />
+    <SolidColorBrush x:Key="Theme.ScrollThumb" Color="#FFC2C2C2" />
+    <SolidColorBrush x:Key="Theme.ScrollThumbHover" Color="#FFA0A0A0" />
+
+    <SolidColorBrush x:Key="Theme.OutputBackground" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="Theme.OutputForeground" Color="#FF000000" />
+    <SolidColorBrush x:Key="Theme.OutputSelection" Color="#FFADD6FF" />
+    <SolidColorBrush x:Key="Theme.OutputBorder" Color="#FFABADB3" />
+</ResourceDictionary>

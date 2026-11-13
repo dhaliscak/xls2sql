@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:xls2sql"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  Index 0 = palette; ThemeManager replaces it with Light.xaml or Dark.xaml at runtime.  -->
+                <ResourceDictionary Source="Themes/Light.xaml" />
+                <ResourceDictionary Source="Themes/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

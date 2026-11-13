@@ -150,6 +150,37 @@ namespace xls2sql
             ContextMenu = menu;
         }
 
+        // Colors come from the theme (DynamicResource in MainWindow.xaml); defaults match the light theme.
+        public static readonly DependencyProperty BackgroundProperty = DependencyProperty.Register(
+            nameof(Background), typeof(Brush), typeof(OutputViewer),
+            new FrameworkPropertyMetadata(Brushes.White, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty ForegroundProperty = DependencyProperty.Register(
+            nameof(Foreground), typeof(Brush), typeof(OutputViewer),
+            new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty SelectionBrushProperty = DependencyProperty.Register(
+            nameof(SelectionBrush), typeof(Brush), typeof(OutputViewer),
+            new FrameworkPropertyMetadata(SystemColors.HighlightBrush, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public Brush Background
+        {
+            get => (Brush)GetValue(BackgroundProperty);
+            set => SetValue(BackgroundProperty, value);
+        }
+
+        public Brush Foreground
+        {
+            get => (Brush)GetValue(ForegroundProperty);
+            set => SetValue(ForegroundProperty, value);
+        }
+
+        public Brush SelectionBrush
+        {
+            get => (Brush)GetValue(SelectionBrushProperty);
+            set => SetValue(SelectionBrushProperty, value);
+        }
+
         public bool HasSelection => _selAnchor >= 0 && _selAnchor != _selCaret;
 
         public void SetOutput(OutputIndex index)
@@ -277,11 +308,11 @@ namespace xls2sql
 
         private FormattedText MakeText(string text, double pixelsPerDip) =>
             new FormattedText(text, CultureInfo.InvariantCulture, FlowDirection.LeftToRight,
-                              _typeface, _fontSize, SystemColors.WindowTextBrush, pixelsPerDip);
+                              _typeface, _fontSize, Foreground, pixelsPerDip);
 
         protected override void OnRender(DrawingContext dc)
         {
-            dc.DrawRectangle(SystemColors.WindowBrush, null, new Rect(RenderSize));
+            dc.DrawRectangle(Background, null, new Rect(RenderSize));
             if (_index.Output.Length == 0) return;
 
             double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
@@ -304,7 +335,7 @@ namespace xls2sql
                     // Selection running past the row end marks the line break / wrap with half a cell.
                     double x1 = Padding + ce * _charWidth + (selB > rowEnd ? _charWidth / 2 : 0);
                     if (x1 > x0)
-                        dc.DrawRectangle(SystemColors.HighlightBrush, null, new Rect(x0, y, x1 - x0, _rowHeight));
+                        dc.DrawRectangle(SelectionBrush, null, new Rect(x0, y, x1 - x0, _rowHeight));
                 }
 
                 if (text.Length > 0)

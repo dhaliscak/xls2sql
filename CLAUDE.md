@@ -31,6 +31,12 @@ Single-window WPF app, no MVVM. UI glue in `xls2sql/MainWindow.xaml.cs`; WPF-fre
 3. Generate/Save → `ReadSettings()` snapshots UI into `SqlSettings`; `GenerateSQLQueryAsync` awaits the cached sheet, then `SqlGenerator.Generate` on the thread pool
 4. Generate first drops the previous `_output` (old and new are never alive together), builds `OutputIndex` off the UI thread, calls `txtEditor.SetOutput`, then `ReleaseFreedMemory()` (LOH compaction; `GCCollectionMode.Aggressive` on .NET 7+ to decommit). Save streams `SqlOutput` chunks to `{tableName}.txt` next to the `.exe` (same bytes as `File.WriteAllText`). Copy All decodes `_output` to one string only on click
 
+**Theming (`xls2sql/ThemeManager.cs`, `xls2sql/Themes/`):**
+- `Themes/Light.xaml` / `Themes/Dark.xaml` — palettes with identical `Theme.*` brush keys (add a key to both). Merged into `App.xaml` at index 0; `ThemeManager` swaps that entry at runtime
+- `Themes/Controls.xaml` — implicit styles for Label, Button, TextBox, CheckBox, ComboBox/ComboBoxItem, ScrollBar, ContextMenu/MenuItem, ToolTip, ResizeGrip, plus keyed `IconButton`. Full replacement templates because Aero2 hardcodes light colors. All colors via `DynamicResource Theme.*`; never hardcode colors or use `SystemColors` in XAML/code
+- `ThemeManager` — `ThemeMode` System/Light/Dark, `Cycle()` System→Light→Dark→System. System reads `HKCU\...\Themes\Personalize\AppsUseLightTheme` and follows live changes via `SystemEvents.UserPreferenceChanged`. Mode is **not persisted** (each start = System; do not add settings storage). `ApplyTitleBar` sets `DWMWA_USE_IMMERSIVE_DARK_MODE` (20, fallback 19). `Initialize`/`Shutdown` from `App.OnStartup`/`OnExit`
+- `OutputViewer` draws itself: colors come from its `Background`/`Foreground`/`SelectionBrush` dependency properties, bound to `Theme.Output*` in `MainWindow.xaml`
+
 **`SqlGenerator.cs`:**
 - `SheetData` — all rows as `string[]` (row 0 = header); each row has the reader's `FieldCount` cells, padded with `""`
 - `SheetReader` — Sylvan Excel with `ExcelSchema.NoHeaders`; Sylvan CSV with `HasHeaders = false`, Windows-1250 fallback encoding, auto-detected delimiter
@@ -61,3 +67,8 @@ Single-window WPF app, no MVVM. UI glue in `xls2sql/MainWindow.xaml.cs`; WPF-fre
 | `txtEditor` | `OutputViewer` (in `OutputViewer.cs`) inside a `ScrollViewer` with `CanContentScroll=True`. Read-only, virtualized: hard-wraps lines into fixed Consolas rows (columns counted in UTF-8 bytes, like xls2sql-rs `viewer.rs`) and decodes/draws only visible rows. Mouse selection, Ctrl+C, Ctrl+A, context menu. Replaced TextBox (~25s layout for 30M chars) and AvalonEdit (lays out each whole ~600K-char INSERT line; 2.8 GB + 64s to scroll a 239 MB script) |
 | `btnCopyAll` | Next to "Output" label; copies full output to clipboard. Hidden until Generate produces output (mirrors xls2sql-rs) |
 | `txtStatus` | Timing/status bar |
+| `btnTheme` | Top-right icon button (`IconButton` style, overlays the window; first row has right margin for it). Cycles theme; glyph E7F4 monitor / E706 sun / E708 moon (Segoe Fluent Icons / MDL2 Assets), tooltip shows current mode |
+
+## Release
+
+Version lives in `xls2sql.csproj` `<Version>` and the `MainWindow.xaml` window title — bump both. Publish each target (framework-dependent, not self-contained) into `download/.net 8.0/vX.Y/` and `download/.net 4.8/vX.Y/`; keep older version folders. Add a `## vX.Y` changelog entry at the top of README.md and point its Download section at the new folders.

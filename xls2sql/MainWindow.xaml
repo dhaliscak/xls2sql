@@ -5,15 +5,27 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:xls2sql"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="xls2sql 3.1 (by Daniel Haliscak)"
+    Title="xls2sql 3.2 (by Daniel Haliscak)"
     Width="800"
     Height="450"
+    Background="{DynamicResource Theme.WindowBackground}"
+    Foreground="{DynamicResource Theme.Foreground}"
     ResizeMode="CanResizeWithGrip"
     mc:Ignorable="d">
     <Grid>
+        <!--  Theme toggle (System / Light / Dark); overlays the top-right corner, first row keeps room for it.  -->
+        <Button
+            Name="btnTheme"
+            Margin="0,10,10,0"
+            Panel.ZIndex="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Click="BtnTheme_Click"
+            Style="{StaticResource IconButton}" />
+
         <DockPanel Margin="10,10,9.6,10">
             <WrapPanel
-                Margin="0,0,0,10"
+                Margin="0,0,36,10"
                 HorizontalAlignment="left"
                 DockPanel.Dock="Top">
                 <Label
@@ -135,11 +147,7 @@
                     Drop="TxtFilepath_Drop"
                     IsReadOnly="True"
                     PreviewDragOver="TxtFilepath_PreviewDragOver"
-                    TextWrapping="NoWrap">
-                    <TextBox.Background>
-                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}" />
-                    </TextBox.Background>
-                </TextBox>
+                    TextWrapping="NoWrap" />
                 <Button
                     Name="btnOpenFile"
                     Margin="0,5,5,5"
@@ -199,13 +207,17 @@
                 -->
                 <Border
                     Grid.Row="1"
-                    BorderBrush="#FFABADB3"
+                    BorderBrush="{DynamicResource Theme.OutputBorder}"
                     BorderThickness="1">
                     <ScrollViewer
                         CanContentScroll="True"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Visible">
-                        <local:OutputViewer x:Name="txtEditor" />
+                        <local:OutputViewer
+                            x:Name="txtEditor"
+                            Background="{DynamicResource Theme.OutputBackground}"
+                            Foreground="{DynamicResource Theme.OutputForeground}"
+                            SelectionBrush="{DynamicResource Theme.OutputSelection}" />
                     </ScrollViewer>
                 </Border>
                 <TextBlock

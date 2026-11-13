@@ -8,10 +8,15 @@ Do you have data in spreadsheet and you need to quickly create INSERT script? Pe
 
 # Download
 Download content of following folder https://github.com/dhaliscak/xls2sql/tree/main/download and run .exe file
-- `download/.net 8.0/v3.1` - requires .NET 8 Desktop Runtime
-- `download/.net 4.8/v3.1` - runs on .NET Framework 4.8 (included in Windows 10/11)
+- `download/.net 8.0/v3.2` - requires .NET 8 Desktop Runtime
+- `download/.net 4.8/v3.2` - runs on .NET Framework 4.8 (included in Windows 10/11)
 
 # Changelog
+## v3.2
+- dark / light mode: follows Windows app mode by default (also when changed while app is running)
+- theme toggle button in top-right corner: Windows -> Light -> Dark (not saved, every start follows Windows)
+- dark title bar in dark mode (Windows 10 20H1+ / Windows 11)
+
 ## v3.1
 - upgraded from .NET 5.0 to .NET 8.0 (.NET Framework 4.8 build still available)
 - replaced ExcelDataReader with Sylvan.Data.Excel / Sylvan.Data.Csv (faster reading, added .xlsb support)

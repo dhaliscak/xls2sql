@@ -27,6 +27,39 @@ namespace xls2sql
         public MainWindow()
         {
             InitializeComponent();
+
+            SourceInitialized += (s, e) => ThemeManager.ApplyTitleBar(this);
+            ThemeManager.ThemeChanged += OnThemeChanged;
+            Closed += (s, e) => ThemeManager.ThemeChanged -= OnThemeChanged;
+            UpdateThemeButton();
+        }
+
+        private void BtnTheme_Click(object sender, RoutedEventArgs e) => ThemeManager.Cycle();
+
+        private void OnThemeChanged(object sender, EventArgs e)
+        {
+            ThemeManager.ApplyTitleBar(this);
+            UpdateThemeButton();
+        }
+
+        // Segoe MDL2 / Fluent glyphs: E7F4 monitor (System), E706 sun (Light), E708 moon (Dark).
+        private void UpdateThemeButton()
+        {
+            switch (ThemeManager.Mode)
+            {
+                case ThemeMode.Light:
+                    btnTheme.Content = "";
+                    btnTheme.ToolTip = "Theme: Light (click for Dark)";
+                    break;
+                case ThemeMode.Dark:
+                    btnTheme.Content = "";
+                    btnTheme.ToolTip = "Theme: Dark (click to follow Windows)";
+                    break;
+                default:
+                    btnTheme.Content = "";
+                    btnTheme.ToolTip = $"Theme: Windows ({(ThemeManager.IsDark ? "Dark" : "Light")}) (click for Light)";
+                    break;
+            }
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
